@@ -1,4 +1,4 @@
-name := """webapp"""
+name := """BlindLove"""
 
 version := "0.7.3-SNAPSHOT"
 
