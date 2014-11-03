@@ -1,0 +1,175 @@
+@(signupForm: Form[_])
+@import controllers.security.Account
+
+@import services.authentication.AuthenticationService
+@import helper._
+@import helper.twitterBootstrap._
+
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
+
+<div>
+    @if(flash.contains(AuthenticationService.FLASH_ERROR_KEY)) {
+        <div class="alert alert-error">
+        @flash().get(AuthenticationService.FLASH_ERROR_KEY)
+        </div>
+    }
+    @if(flash.contains(AuthenticationService.FLASH_MESSAGE_KEY)) {
+        <div class="alert alert-success">
+        @flash().get(AuthenticationService.FLASH_MESSAGE_KEY)
+        </div>
+    }
+</div>
+
+        @* Display proprietary login form *@
+    	@helper.form(controllers.security.routes.Account.doSignup) {
+
+            @if(signupForm.hasGlobalErrors) { 
+                <p class="error">
+		            <span class="label label-important">@signupForm.globalError.message</span>
+		        </p>
+            }
+
+            @inputText(
+                signupForm("email"),
+                '_showConstraints -> true,
+                '_label -> "Email"
+            )
+
+            @inputPassword(
+                signupForm("password"),
+                '_showConstraints -> true,
+                '_label -> "Password"
+            )
+
+            @inputPassword(
+                signupForm("repeatPassword"),
+                '_showConstraints -> true,
+                '_label -> "Repeat Password"
+            )
+
+            @inputText(
+                signupForm("firstName"),
+                '_label -> "First name"
+            )
+
+            @inputText(
+                signupForm("lastName"),
+                '_label -> "Last name"
+            )
+
+            @inputRadioGroup(
+                signupForm("gender"),
+                options = options("male"->"Male", "female"->"Female", "other"->"Other"),
+                '_label -> "Gender",
+                '_id -> "gender"
+            )
+
+            @inputText(
+                signupForm("currentCity"),
+                '_label -> "Current City"
+            )
+
+            @inputText(
+                signupForm("hometown"),
+                '_label -> "Hometown"
+            )
+
+            @select(
+                signupForm("educationalLevel"),
+                options = options(scala.List(
+                    "Some high school",
+                    "High school graduate",
+                    "Some college",
+                    "Associate's and/or Bachelor's degree",
+                    "Bachelor's degree",
+                    "Master's and/or Doctorate and/or professional degree",
+                    "Doctorate and/or professional degree",
+                    "Doctorate"
+                )),
+                '_label -> "Educational Level"
+            )
+
+            @select(
+                signupForm("educationalField"),
+                options = options(scala.List(
+                    "None",
+                    "Humanities",
+                    "Social sciences",
+                    "Natural sciences",
+                    "Formal sciences",
+                    "Professional"
+                )),
+                '_label -> "Educational Field"
+            )
+
+            @select(
+                signupForm("employmentField"),
+                options = options(scala.List(
+                    "Accounting / Finance",
+                    "Advertising",
+                    "Anthropology / Archaeology ",
+                    "Architect",
+                    "Arts and Entertainment ",
+                    "Broadcast",
+                    "Business",
+                    "Call Center",
+                    "Communications",
+                    "Construction",
+                    "Dance",
+                    "Education",
+                    "Environmental",
+                    "Executive",
+                    "Film, Television, Theatre ",
+                    "Funeral",
+                    "Government",
+                    "Graphic Design",
+                    "Green  / Careers ",
+                    "Health Care",
+                    "Hospitality",
+                    "Human Resources",
+                    "Insurance",
+                    "Internet",
+                    "Janitorial",
+                    "Legal",
+                    "Library",
+                    "Military",
+                    "Museum",
+                    "Music",
+                    "Nanny",
+                    "Non Profit",
+                    "Outdoor",
+                    "Real Estate",
+                    "Religious and Ministry",
+                    "Retail / Fashion",
+                    "Retirement",
+                    "Sales / Marketing",
+                    "Science ",
+                    "Skilled Trades ",
+                    "Sports",
+                    "Technology",
+                    "Travel / Transportation ",
+                    "Union",
+                    "Veterans",
+                    "Volunteer Opportunities ",
+                    "Web Design",
+                    "Winery",
+                    "Zoo"
+                )),
+                '_label -> "Employment Field"
+            )
+
+            @textarea(
+                signupForm("bio"),
+                '_label -> "Bio"
+            )
+
+            @textarea(
+                signupForm("interests"),
+                '_label -> "Interests"
+            )
+
+
+            <input type="submit" value="@Messages("raa.signup.now")" class="btn btn-primary">
+    	}
+
+

@@ -1,0 +1,49 @@
+@(loginForm: Form[_])
+
+@import services.authentication.AuthenticationService
+
+@import helper._
+@import helper.twitterBootstrap._
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="@controllers.routes.Application.jsRoutes" defer="defer"></script>
+
+    <div>
+        @if(flash.contains(AuthenticationService.FLASH_ERROR_KEY)) {
+            <div class="alert alert-error">
+            @flash().get(AuthenticationService.FLASH_ERROR_KEY)
+            </div>
+        }
+        @if(flash.contains(AuthenticationService.FLASH_MESSAGE_KEY)) {
+            <div class="alert alert-success">
+            @flash().get(AuthenticationService.FLASH_MESSAGE_KEY)
+            </div>
+        }
+    </div>
+
+      @* Display proprietary login form *@
+    	@helper.form(controllers.security.routes.Account.doLogin) {
+
+        @if(loginForm.hasGlobalErrors) {
+          <p class="error">
+            <span class="label label-important">@loginForm.globalError.message</span>
+          </p>
+        }
+
+        @inputText(
+            loginForm("email"),
+            '_showConstraints -> true,
+            '_label -> Messages("playauthenticate.login.email.placeholder")
+        )
+
+        @inputPassword(
+          loginForm("password"),
+          '_showConstraints -> true,
+          '_label -> Messages("playauthenticate.login.password.placeholder")
+        )
+
+        <input type="submit" value="@Messages("playauthenticate.login.now")" class="btn btn-primary"><br/>
+        <br/>
+        <!--<a href="javascript:void(0);" onclick="window.location.href = jsRoutes.controllers.security.Account.forgotPassword($('#email').val() || null).absoluteURL();">@Messages("playauthenticate.login.forgot.password")</a>
+!-->
+    	}

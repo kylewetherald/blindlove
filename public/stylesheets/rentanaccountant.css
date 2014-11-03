@@ -1,0 +1,163 @@
+@charset "UTF-8";
+
+@import url(http://fonts.googleapis.com/css?family=Oswald:400,300,700);
+
+html, body {
+	padding: 0;
+	font-family: "Oswald","Helvetica Neue", Arial, sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	background-color: #eee;
+}
+
+span.unicode{
+	font-family: sans-serif;
+}
+
+.logo {
+	position: absolute;
+	top: 2em; left: 2em;
+}
+.logo a {
+	font-size: 2em;
+	text-decoration: none;
+	color: #eb6361;
+}
+
+.breadcrumbs {
+	position: absolute;
+	top: 2.1em; left: 11em;
+	color: #aaa;
+}
+
+.user-info {
+	position: absolute;
+	top: 2.1em; right: 2em;
+}
+.user-info span.unicode{
+	margin-left: 0.5em;
+}
+
+.content-box {
+	width: 36em;
+	margin: 10em auto;
+	padding: 1.2em;
+	border: 2px solid #eb6361;
+	border-radius: 1em;
+	background-color: #fff;
+	position: relative;
+}
+.content-box.not-last {
+	margin-bottom: 2em;
+}
+.content-box.not-first {
+	margin-top: 2em;
+}
+
+.content-box h1 {
+	margin: 0 0 1em 0;
+	font-size: 2em;
+	font-weight: normal;
+}
+
+.content-box ul.actions, .content-box ul.transactionlist {
+	list-style: none;
+	margin: -1.2em;
+	padding: 0.5em;
+}
+.content-box .actions li, .content-box .transactionlist li {
+	border-bottom: 1px solid #eb6361;
+}
+.content-box .actions li:last-child, .content-box .transactionlist li:last-child {
+	border-bottom: none;
+}
+
+.content-box ul.actions>li>ul {
+	list-style: none;
+	margin-left: 2em; padding-left: 0;
+}
+
+.content-box .actions a {
+	color: #000;
+	display: block;
+	padding: 0.7em 1em;
+}
+.content-box .transactionlist li {
+	padding: 0.8em 1em;
+	position: relative;
+}
+
+.transactionlist h3 {
+	font-weight: normal;
+	margin: 0 6em 0.5em 0;
+	min-height: 3em
+}
+.transactionlist p span {
+	font-size: 0.8em;
+	color: #999;
+	margin-right: 0.5em;
+}
+.transactionlist img {
+	max-height: 30em;
+	max-width: 100%;
+	width: auto;
+	margin: 0 auto;
+	display: block;
+}
+.transactionlist .date {
+	position: absolute;
+	top: 0; right: 0.8em;
+}
+.transactionlist .amount {
+	position: absolute;
+	top: 1.5em; right: 0.8em;
+}
+.transactionlist .receipt {
+	background-color: #eb6361;
+	color: #fff;
+	padding: 0.5em;
+	border-radius: 0.7em;
+}
+.transactionlist .receipt.uploaded {
+	background-color: #ffe4e0;
+	color: #000;
+}
+.transactionlist .receipt .receiptname {
+	float: right;
+}
+.transactionlist .receipt .index, .transactionlist .receipt .upload {
+	display: inline-block;
+}
+.transactionlist .receipt .index {
+	font-size: 2em;
+	width: 1.8em; height: 1.8em;
+	line-height: 1.8em;
+	border-radius: 1em;
+	text-align: center;
+	border: 2px solid #fff;
+	color: #fff;
+	margin-right: 0.5em;
+}
+
+
+.content-box .account-id {
+	position: absolute;
+	top: 0.5em; right: 1.2em;
+	color: #999;
+}
+.content-box .period-information>div{
+	display: inline-block;
+	width: 49%;
+}
+.content-box .period-information>div h2{
+	margin-top: 0;
+	color: #eb6361;
+	font-weight: normal;
+}
+
+.content-button {
+	background-color: #eb6361;
+	color: #fff;
+	padding: 0.4em 0.8em;
+	border-radius: 0.8em;
+}

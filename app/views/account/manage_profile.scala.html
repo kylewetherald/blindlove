@@ -1,0 +1,125 @@
+@import controllers.security.Account
+
+@import services.authentication.AuthenticationService
+@import helper._
+@import helper.twitterBootstrap._
+
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
+    <style>
+        div#assignedAccountant { display: none; }
+    </style>
+
+<div>
+    @if(flash.contains(AuthenticationService.FLASH_ERROR_KEY)) {
+        <div class="alert alert-error">
+        @flash().get(AuthenticationService.FLASH_ERROR_KEY)
+        </div>
+    }
+    @if(flash.contains(AuthenticationService.FLASH_MESSAGE_KEY)) {
+        <div class="alert alert-success">
+        @flash().get(AuthenticationService.FLASH_MESSAGE_KEY)
+        </div>
+    }
+</div>
+
+    @Account.getLocalUserOption.map { u =>
+        <p>Welcome, @u.firstName</p>
+    }.getOrElse {
+        <a href="/login">Login</a> | <a href="/signup">Signup</a>
+    }
+
+        @* Display proprietary login form
+    	@helper.form(controllers.security.routes.Account.doManageProfile) {
+
+            @if(profileForm.hasGlobalErrors) {
+                <p class="error">
+		            <span class="label label-important">@(profileForm.globalError.message)</span>
+		        </p>
+            }
+
+            @inputText(
+               profileForm("email"),
+                '_showConstraints -> true,
+
+                '_label -> Messages("playauthenticate.login.email.placeholder")
+            )
+
+            @inputPassword(
+                profileForm("password"),
+                '_showConstraints -> true,
+                '_label -> Messages("playauthenticate.login.password.placeholder")
+            )
+
+            @defining(profileForm("id")) { uidField =>
+                <input type="hidden" name="@uidField.name" id="@uidField.id" value="@uidField.value">
+            }
+
+            @inputPassword(
+                profileForm("repeatPassword"),
+                '_showConstraints -> true,
+                '_label -> Messages("raa.signup.repeatpassword")
+            )
+
+            @inputText(
+                profileForm("name"),
+                '_label -> Messages("playauthenticate.signup.name")
+            )
+
+            @inputText(
+                profileForm("surname"),
+                '_label -> Messages("raa.signup.surname")
+            )
+
+            @inputText(
+                profileForm("companyName"),
+                '_label -> Messages("raa.signup.companyname")
+            )
+
+            @inputText(
+                profileForm("streetAddress"),
+                '_label -> Messages("raa.signup.streetaddress")
+            )
+
+            @inputText(
+                profileForm("po"),
+                '_label -> Messages("raa.signup.po")
+            )
+
+            @inputText(
+                profileForm("city"),
+                '_label -> Messages("raa.signup.city")
+            )
+
+            @inputRadioGroup(
+                profileForm("accountant"),
+                options = options("true"->Messages("raa.signup.accountant"), "false"->Messages("raa.signup.client")),
+                '_label -> Messages("raa.signup.accountantorclient"),
+                '_id -> "accountant"
+            )
+
+            @select(
+                profileForm("assignedAccountant"),
+                options = options(User.getAccountants.map(u => u.id.toString -> (u.name + " " + u.surname)).toMap),
+                '_label -> Messages("raa.signup.assignedaccountant"),
+                '_id -> "assignedAccountant"
+            )
+
+
+            <input type="submit" value="@Messages("raa.manage_profile.now")" class="btn btn-primary">
+    	}
+*@
+
+<script type="text/javascript">
+    $(document ).ready(function () {
+        if ($('input[type=radio]:checked' ).val() == 'false') $("div#assignedAccountant" ).show();
+        $('input[type=radio][name=accountant]').change(function() {
+            if (this.value == 'true') {
+                $("div#assignedAccountant" ).hide()
+            }
+            else if (this.value == 'false') {
+                $("div#assignedAccountant" ).show()
+            }
+        });
+
+    })
+</script>

@@ -1,0 +1,33 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET         /                                      controllers.Application.index
+
+# CRUD Controllers
+->          /app                                   play.crud.Routes
+# REST API
+->          /api                                   play.rest.Routes
+
+#Authentication routes
+GET         /authenticate/:provider                com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
+GET         /accounts/link                         controllers.security.Account.askLink
+GET         /accounts/merge                        controllers.security.Account.askMerge
+GET         /login                                 controllers.security.Account.login
+GET         /signup                                controllers.security.Account.signup
+GET         /authenticate/:provider/denied         controllers.security.Account.oAuthDenied(provider: String)
+POST        /login                                 controllers.security.Account.doLogin
+POST        /signup                                controllers.security.Account.doSignup
+GET         /accounts/verify/:token                controllers.security.Account.verify(token: String)
+GET         /accounts/exists                       controllers.security.Account.exists
+GET         /accounts/unverified                   controllers.security.Account.unverified
+GET         /logout                                com.feth.play.module.pa.controllers.Authenticate.logout
+GET         /login/password/forgot                 controllers.security.Account.forgotPassword(email: String ?= "")
+POST        /login/password/forgot                 controllers.security.Account.doForgotPassword
+GET         /accounts/password/reset/:token        controllers.security.Account.resetPassword(token: String)
+POST        /accounts/password/reset               controllers.security.Account.doResetPassword
+GET         /manageProfile                         controllers.security.Account.manageProfile()
+#POST        /manageProfile                         controllers.security.Account.doManageProfile()
+
+GET         /assets/javascript/routes.js           controllers.Application.jsRoutes
+GET         /assets/*file                          controllers.Assets.at(path="/public", file)
