@@ -1,0 +1,6 @@
+@(in:User)
+@layout() {
+    @userLi(new controllers.Application.UserResult(in, null))<br />
+    <p><strong>Bio: </strong>@in.bio</p>
+    <p><strong>Interests: </strong>@in.interests</p>
+}

@@ -1,0 +1,40 @@
+package models;
+
+import play.db.ebean.Model;
+import play.utils.dao.BasicModel;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+/**
+ * Created by Adam on 11/15/2014.
+ */
+@Entity
+public class TextChat extends Model implements BasicModel<Long> {
+    @Id 
+    private Long id;
+    public Long getKey() { return id; }
+    public void setKey(Long id) { this.id = id; }
+
+    @ManyToOne
+    private User sender;
+
+    @ManyToOne
+    private User recipient;
+
+    private Boolean accepted;
+
+    public Boolean getAccepted() { return accepted; }
+
+    public void setAccepted(Boolean b) { accepted = b; }
+
+    public User getSender() { return sender; }
+
+    public void setSender(User u) { this.sender = u; }
+
+    public User getRecipient() { return recipient; }
+
+    public void setRecipient(User u) { recipient = u; }
+
+}

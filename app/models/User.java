@@ -60,8 +60,10 @@ public class User extends Model implements Subject {
 
     public String employmentField;
 
+    @Column(columnDefinition = "TEXT")
     public String bio;
 
+    @Column(columnDefinition = "TEXT")
     public String interests;
 
     @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -77,7 +79,7 @@ public class User extends Model implements Subject {
     @OneToMany(cascade = CascadeType.ALL)
     public List<LinkedAccount> linkedAccounts;
 
-    public static final Finder<Long, User> find = new Finder<>(Long.class, User.class);
+    public static final Model.Finder<Long, User> find = new Model.Finder<>(Long.class, User.class);
 
     @Override
     public String getIdentifier()
@@ -161,13 +163,6 @@ public class User extends Model implements Subject {
         // deactivate the merged user that got added to this one
         otherUser.active = false;
         Ebean.save(Arrays.asList(new User[] { otherUser, this }));
-    }
-
-    /**
-     * Get assigned clients for an accountant
-     */
-    public void getAssignedClients() {
-
     }
 
     /**

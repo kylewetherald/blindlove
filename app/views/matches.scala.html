@@ -1,0 +1,56 @@
+@(love:java.util.List[Match],
+        incoming:java.util.List[Match],
+        outgoing:java.util.List[Match],
+        rejections:java.util.List[Reject],
+        auto:java.util.Map[User,java.lang.Float])
+
+@layout() {
+    <style type=text/css>li { clear:both; } h2 { clear:both; }</style>
+    <h2>AutoLove</h2>
+    <ul>
+    @auto.toList.sortBy(_._2).reverse.map { us =>
+        <li>
+            <strong>BlindLove MatchScore: @us._2</strong><br />
+            @userLi(new controllers.Application.UserResult(us._1, null)) <br />
+            <a href="/createMatch?targetId=@us._1.id">Create Match</a>
+        </li>
+    }
+    </ul>
+    <h2>Requited Love</h2>
+    <ul>
+        @love.map { mtch =>
+            @defining({ if (mtch.getMatchedUser.id == controllers.security.Account.getLocalUserOption.get.id) mtch.getTargetUser else mtch.getMatchedUser}) { otherUser =>
+                <li>
+                    @userLi(new controllers.Application.UserResult(otherUser, null)) <br />
+                <a href="/match/@mtch.getKey/createTextChat">Request Text Chat</a>
+                <a href="/match/@mtch.getKey/createVideoChat">Request Video Chat</a>
+                </li>
+            }
+        }
+    </ul>
+    <h2>Suitors</h2>
+    <ul>
+        @incoming.map { mtch =>
+          <li>
+              @userLi(new controllers.Application.UserResult(mtch.getMatchedUser, null)) <br />
+              <a href="/match/@mtch.getKey/accept">Accept Match</a>
+              <a href="/match/@mtch.getKey/reject">Reject Match</a>
+          </li>
+        }
+    </ul>
+    <h2>Unrequited Love</h2>
+    <ul>
+    @outgoing.map { mtch =>
+        <li>
+            @userLi(new controllers.Application.UserResult(mtch.getTargetUser, null)) <br />
+        </li>
+    }
+    </ul>
+    <h2>Rejections</h2>
+    <ul>
+    @rejections.map { reject =>
+        <li>@userLi(new controllers.Application.UserResult(reject.getRejector, null))</li>
+    }
+    </ul>
+
+}

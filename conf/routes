@@ -3,7 +3,12 @@
 # ~~~~
 
 GET         /                                      controllers.Application.index
-
+POST        /search                                controllers.Application.search
+GET         /matches                               controllers.Application.matches
+GET         /matches/:mid/accept                   controllers.Application.acceptMatch(mid:Long)
+GET         /matches/:mid/reject                   controllers.Application.rejectMatch(mid:Long)
+GET         /createMatch                           controllers.Application.createMatch(targetId:Long)
+GET         /profile/:uid                          controllers.Application.profile(uid:Long)
 # CRUD Controllers
 ->          /app                                   play.crud.Routes
 # REST API
@@ -27,7 +32,7 @@ POST        /login/password/forgot                 controllers.security.Account.
 GET         /accounts/password/reset/:token        controllers.security.Account.resetPassword(token: String)
 POST        /accounts/password/reset               controllers.security.Account.doResetPassword
 GET         /manageProfile                         controllers.security.Account.manageProfile()
-#POST        /manageProfile                         controllers.security.Account.doManageProfile()
+POST        /manageProfile                         controllers.security.Account.doManageProfile()
 
 GET         /assets/javascript/routes.js           controllers.Application.jsRoutes
 GET         /assets/*file                          controllers.Assets.at(path="/public", file)

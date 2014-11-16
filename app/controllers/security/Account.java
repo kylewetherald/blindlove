@@ -51,28 +51,24 @@ public class Account extends Controller {
         return ok(signup.render(AuthenticationService.SIGNUP_FORM));
   }
 
-
+  @SubjectPresent
   public static Result manageProfile() {
-      /* User u = getLocalUser(session());
+       User u = getLocalUser(session());
       UserSignup ra = new UserSignup();
       ra.email = u.email;
-     ra.name = u.name;
-
-
-      ra.surname = u.surname;
+      ra.firstName = u.firstName;
+      ra.lastName = u.lastName;
+      ra.bio = u.bio;
+      ra.currentCity = u.currentCity;
+      ra.educationalField = u.educationalField;
+      ra.educationalLevel = u.educationalLevel;
+      ra.employmentField = u.employmentField;
+      ra.gender = u.gender;
+      ra.hometown = u.hometown;
       ra.id = u.id;
-      if (u.roles.contains(SecurityRole.findByRoleName(User.ACCOUNTANT_ROLE))) ra.accountant = "true";
-      else ra.accountant = "false";
-      ra.city = u.city;
-      ra.streetAddress = u.streetAddress;
-      ra.po = u.po;
-      ra.companyName = u.companyName;
-      if (u.assignedAccountant != null) {
-          ra.assignedAccountant = u.assignedAccountant.id.toString();
-      }
-
-      ra.id = u.id; */
-      return ok(views.html.account.manage_profile.render());
+      ra.interests = u.interests;
+      ra.id = u.id;
+      return ok(views.html.account.manage_profile.render(form(UserSignup.class).fill(ra)));
   }
 
   public static Result doLogin() {
@@ -104,16 +100,19 @@ public class Account extends Controller {
         }
     }
 
-/*    @SubjectPresent
+    @SubjectPresent
     public static Result doManageProfile() {
         com.feth.play.module.pa.controllers.Authenticate.noCache(response());
         final Form<UserSignup> filledForm = AuthenticationService.SIGNUP_FORM
                 .bindFromRequest();
 
         if (filledForm.hasErrors()) {
+
             // User did not fill everything properly
             return badRequest(views.html.account.manage_profile.render(filledForm));
+
         } else {
+
             // Everything was filled
             // do something with your part of the form before handling the user
             // signup
@@ -138,48 +137,26 @@ public class Account extends Controller {
                }
             }
 
-            u.name = ra.name;
-            u.surname = ra.surname;
-            u.companyName = ra.companyName;
-            u.streetAddress = ra.streetAddress;
-            u.city = ra.city;
-            u.po = ra.po;
-
-            boolean accountant = false;
-            if (ra.accountant.toLowerCase().equals("true")) accountant = true;
-            else accountant = false;
-
-
-            Long assignedAccountantId = -1l;
-            try {
-                if (!accountant) assignedAccountantId = Long.parseLong(ra.assignedAccountant);
-            } catch (Exception e) {
-                play.Logger.error("",e);
-            }
-
-            if (ra.assignedAccountant != null)
-                u.assignedAccountant = User.find.byId(assignedAccountantId);
-            else u.assignedAccountant = null;
-
-            SecurityRole acctRole = SecurityRole.findByRoleName(User.ACCOUNTANT_ROLE);
-            SecurityRole clientRole = SecurityRole.findByRoleName(User.CLIENT_ROLE);
-            if (u.roles.contains(acctRole) && !accountant) {
-                u.roles.remove(acctRole);
-                u.roles.add(clientRole);
-            } else if (u.roles.contains(clientRole) && accountant) {
-                u.roles.remove(clientRole);
-                u.roles.add(acctRole);
-            }
+            u.bio = ra.bio;
+            u.currentCity = ra.currentCity;
+            u.educationalField = ra.educationalField;
+            u.educationalLevel = ra.educationalLevel;
+            u.employmentField = ra.employmentField;
+            u.firstName = ra.firstName;
+            u.gender = ra.gender;
+            u.hometown = ra.hometown;
+            u.interests = ra.interests;
+            u.lastName = ra.lastName;
 
             u.save();
             u.saveManyToManyAssociations("roles");
 
             //if email was changed, must login again
             if (emailChanged) return redirect(routes.Account.login());
-            return ok(views.html.account.manage_profile.render(filledForm));
+            return ok(views.html.account.manage_profile.render(form(UserSignup.class).fill(ra)));
 
         }
-    }*/
+    }
 
     public static Result verify(final String token) {
         com.feth.play.module.pa.controllers.Authenticate.noCache(response());

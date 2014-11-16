@@ -1,0 +1,33 @@
+@(title:String="BlindLove")(content:Html)
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>@title</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="@controllers.routes.Application.jsRoutes" defer="defer"></script>
+    </head>
+    <body>
+        <h1>BlindLove</h1>
+
+        <ul>
+            <li><a href="/">Home</a></li>
+        @controllers.security.Account.getLocalUserOption.map { me =>
+            <li><form method="POST" action="/search"><input type="text" name="searchText" placeholder="Search" /><input type="submit" value="Search" /></form></li>
+            <li><a href="/matches">Matches</a></li>
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/manageProfile">Edit Profile</a></li>
+        }.getOrElse{
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Create profile</a></li>
+        }
+
+        </ul>
+        <hr />
+        @controllers.security.Account.getLocalUserOption.map { me =>
+            <p>Welcome, @me.firstName!</p>
+        }
+        @content
+    </body>
+</html>
+

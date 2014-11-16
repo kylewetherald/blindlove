@@ -1,3 +1,5 @@
+@(profileForm:Form[_])
+
 @import controllers.security.Account
 
 @import services.authentication.AuthenticationService
@@ -9,26 +11,20 @@
         div#assignedAccountant { display: none; }
     </style>
 
-<div>
-    @if(flash.contains(AuthenticationService.FLASH_ERROR_KEY)) {
-        <div class="alert alert-error">
-        @flash().get(AuthenticationService.FLASH_ERROR_KEY)
-        </div>
-    }
-    @if(flash.contains(AuthenticationService.FLASH_MESSAGE_KEY)) {
-        <div class="alert alert-success">
-        @flash().get(AuthenticationService.FLASH_MESSAGE_KEY)
-        </div>
-    }
-</div>
+    <div>
+        @if(flash.contains(AuthenticationService.FLASH_ERROR_KEY)) {
+            <div class="alert alert-error">
+            @flash().get(AuthenticationService.FLASH_ERROR_KEY)
+            </div>
+        }
+        @if(flash.contains(AuthenticationService.FLASH_MESSAGE_KEY)) {
+            <div class="alert alert-success">
+            @flash().get(AuthenticationService.FLASH_MESSAGE_KEY)
+            </div>
+        }
+    </div>
 
-    @Account.getLocalUserOption.map { u =>
-        <p>Welcome, @u.firstName</p>
-    }.getOrElse {
-        <a href="/login">Login</a> | <a href="/signup">Signup</a>
-    }
-
-        @* Display proprietary login form
+    @* Display proprietary login form *@
     	@helper.form(controllers.security.routes.Account.doManageProfile) {
 
             @if(profileForm.hasGlobalErrors) {
@@ -37,77 +33,156 @@
 		        </p>
             }
 
-            @inputText(
-               profileForm("email"),
-                '_showConstraints -> true,
-
-                '_label -> Messages("playauthenticate.login.email.placeholder")
-            )
-
-            @inputPassword(
-                profileForm("password"),
-                '_showConstraints -> true,
-                '_label -> Messages("playauthenticate.login.password.placeholder")
-            )
-
             @defining(profileForm("id")) { uidField =>
                 <input type="hidden" name="@uidField.name" id="@uidField.id" value="@uidField.value">
             }
 
-            @inputPassword(
-                profileForm("repeatPassword"),
-                '_showConstraints -> true,
-                '_label -> Messages("raa.signup.repeatpassword")
-            )
 
-            @inputText(
-                profileForm("name"),
-                '_label -> Messages("playauthenticate.signup.name")
-            )
+    @inputText(
+        profileForm("email"),
+        '_showConstraints -> true,
+        '_label -> "Email"
+    )
 
-            @inputText(
-                profileForm("surname"),
-                '_label -> Messages("raa.signup.surname")
-            )
+    @inputPassword(
+        profileForm("password"),
+        '_showConstraints -> true,
+        '_label -> "Password"
+    )
 
-            @inputText(
-                profileForm("companyName"),
-                '_label -> Messages("raa.signup.companyname")
-            )
+    @inputPassword(
+        profileForm("repeatPassword"),
+        '_showConstraints -> true,
+        '_label -> "Repeat Password"
+    )
 
-            @inputText(
-                profileForm("streetAddress"),
-                '_label -> Messages("raa.signup.streetaddress")
-            )
+    @inputText(
+        profileForm("firstName"),
+        '_label -> "First name"
+    )
 
-            @inputText(
-                profileForm("po"),
-                '_label -> Messages("raa.signup.po")
-            )
+    @inputText(
+        profileForm("lastName"),
+        '_label -> "Last name"
+    )
 
-            @inputText(
-                profileForm("city"),
-                '_label -> Messages("raa.signup.city")
-            )
+    @inputRadioGroup(
+        profileForm("gender"),
+        options = options("male"->"Male", "female"->"Female", "other"->"Other"),
+        '_label -> "Gender",
+        '_id -> "gender"
+    )
 
-            @inputRadioGroup(
-                profileForm("accountant"),
-                options = options("true"->Messages("raa.signup.accountant"), "false"->Messages("raa.signup.client")),
-                '_label -> Messages("raa.signup.accountantorclient"),
-                '_id -> "accountant"
-            )
+    @inputText(
+        profileForm("currentCity"),
+        '_label -> "Current City"
+    )
 
-            @select(
-                profileForm("assignedAccountant"),
-                options = options(User.getAccountants.map(u => u.id.toString -> (u.name + " " + u.surname)).toMap),
-                '_label -> Messages("raa.signup.assignedaccountant"),
-                '_id -> "assignedAccountant"
-            )
+    @inputText(
+        profileForm("hometown"),
+        '_label -> "Hometown"
+    )
+
+    @select(
+        profileForm("educationalLevel"),
+        options = options(scala.List(
+            "Some high school",
+            "High school graduate",
+            "Some college",
+            "Associate's and/or Bachelor's degree",
+            "Bachelor's degree",
+            "Master's and/or Doctorate and/or professional degree",
+            "Doctorate and/or professional degree",
+            "Doctorate"
+        )),
+        '_label -> "Educational Level"
+    )
+
+    @select(
+        profileForm("educationalField"),
+        options = options(scala.List(
+            "None",
+            "Humanities",
+            "Social sciences",
+            "Natural sciences",
+            "Formal sciences",
+            "Professional"
+        )),
+        '_label -> "Educational Field"
+    )
+
+    @select(
+        profileForm("employmentField"),
+        options = options(scala.List(
+            "Accounting / Finance",
+            "Advertising",
+            "Anthropology / Archaeology ",
+            "Architect",
+            "Arts and Entertainment ",
+            "Broadcast",
+            "Business",
+            "Call Center",
+            "Communications",
+            "Construction",
+            "Dance",
+            "Education",
+            "Environmental",
+            "Executive",
+            "Film, Television, Theatre ",
+            "Funeral",
+            "Government",
+            "Graphic Design",
+            "Green  / Careers ",
+            "Health Care",
+            "Hospitality",
+            "Human Resources",
+            "Insurance",
+            "Internet",
+            "Janitorial",
+            "Legal",
+            "Library",
+            "Military",
+            "Museum",
+            "Music",
+            "Nanny",
+            "Non Profit",
+            "Outdoor",
+            "Real Estate",
+            "Religious and Ministry",
+            "Retail / Fashion",
+            "Retirement",
+            "Sales / Marketing",
+            "Science ",
+            "Skilled Trades ",
+            "Sports",
+            "Technology",
+            "Travel / Transportation ",
+            "Union",
+            "Veterans",
+            "Volunteer Opportunities ",
+            "Web Design",
+            "Winery",
+            "Zoo"
+        )),
+        '_label -> "Employment Field"
+    )
+
+    @textarea(
+        profileForm("bio"),
+        '_label -> "Bio"
+    )
+
+    @textarea(
+        profileForm("interests"),
+        '_label -> "Interests"
+    )
 
 
-            <input type="submit" value="@Messages("raa.manage_profile.now")" class="btn btn-primary">
+
+
+    <input type="submit" value="@Messages("raa.manage_profile.now")" class="btn btn-primary">
     	}
-*@
+
 
 <script type="text/javascript">
     $(document ).ready(function () {

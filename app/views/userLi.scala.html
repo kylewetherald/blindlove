@@ -1,0 +1,23 @@
+@(ur:controllers.Application.UserResult)
+
+@defining(ur.u) { u =>
+
+    <style type=text/css>
+        .bullet {
+            width: 70px;
+            display: block;
+            float: left;
+            padding: 5px;
+            margin-right: 10px;
+        }
+    </style>
+    <h3><img style="float : left ;" src="@routes.Assets.at("images/anon.png")" />
+        <a href="/profile/@u.id">@u.firstName @(u.lastName.charAt(0).toString+".")</a></h3>
+    <div style="width:950px">
+        <div class="bullet"><strong>Gender: </strong>@u.gender     @if(ur.field != null && ur.field.equals("gender")) { * }</div>
+        <div class="bullet"><strong>City: </strong>@u.currentCity  @if(ur.field != null && ur.field.equals("currentCity")) { * }</div>
+        <div class="bullet"><strong>Hometown: </strong>@u.hometown  @if(ur.field != null && ur.field.equals("hometown")) { * }</div>
+        <div class="bullet"><strong>Education: </strong>@u.educationalLevel, @u.educationalField @if(ur.field != null && ur.field.equals("educationalField")) { * }</div>
+        <div class="bullet"><strong>Employment:</strong> @u.employmentField @if(ur.field != null && ur.field.equals("employmentField")) { * }</div>
+    </div><br />
+}

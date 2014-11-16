@@ -5,8 +5,8 @@
 @import helper._
 @import helper.twitterBootstrap._
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="@controllers.routes.Application.jsRoutes" defer="defer"></script>
+
+@layout() {
 
     <div>
         @if(flash.contains(AuthenticationService.FLASH_ERROR_KEY)) {
@@ -47,3 +47,4 @@
         <!--<a href="javascript:void(0);" onclick="window.location.href = jsRoutes.controllers.security.Account.forgotPassword($('#email').val() || null).absoluteURL();">@Messages("playauthenticate.login.forgot.password")</a>
 !-->
     	}
+}
