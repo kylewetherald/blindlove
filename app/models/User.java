@@ -15,10 +15,12 @@ import play.Play;
 import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
+import services.NotificationService;
 import services.authentication.AuthenticationService;
 import services.usermanagement.UserManagementService;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -110,6 +112,35 @@ public class User extends Model implements Subject {
         }
 
         return exp.findRowCount() > 0;
+    }
+
+    public List<Notification> getNotifications() {
+        return NotificationService.getNotifications(this);
+    }
+
+    public List<Notification> getRecentNotifications() {
+        return NotificationService.getRecentNotifications(this);
+    }
+
+    public Date getLastLogin() { return  lastLogin; }
+    public void setLastLogin(Date d) { lastLogin = d; }
+
+    public static class Notification {
+        public Date receiptDate;
+        public Dated obj;
+        public User me;
+        public String toString() { //TODO have these include HTML to take action (eg accept / respond)
+            if (obj instanceof Message) return "New message from " + ((Message) obj).getSender().firstName;
+            if (obj instanceof TextChat) return "New text chat request from " + ((TextChat) obj).getSender().firstName;
+            if (obj instanceof VideoChat) return "New video chat request from " + ((VideoChat) obj).getSender().firstName;
+            if (obj instanceof Match) return "New match with " + ((Match) obj).getOtherUser(me).firstName;
+            if (obj instanceof Reject) return "Rejected by " + ((Reject) obj).getOtherUser(me).firstName;
+            return "New notification on " + new SimpleDateFormat("dd MMM yyyy").format(receiptDate);
+        }
+        public Notification(Dated obj, User me) {
+            if (obj.getCreated() == null) receiptDate = new Date();
+            else receiptDate = obj.getCreated();
+        }
     }
 
     /**

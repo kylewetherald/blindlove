@@ -22,6 +22,7 @@ import play.mvc.Http;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -145,6 +146,8 @@ public class AuthenticationService
                         if (authUser.checkPassword(acc.providerUserId,
                                 authUser.getPassword())) {
                             // Password was correct
+                            u.setLastLogin(new Date());
+                            u.save();
                             return LoginResult.USER_LOGGED_IN;
                         } else {
                             // if you don't return here,

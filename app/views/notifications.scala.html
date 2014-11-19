@@ -1,0 +1,7 @@
+@layout() {
+    <ul>
+    @controllers.security.Account.getLocalUserOption.get.getNotifications.map { not =>
+        <li>@not</li>
+    }
+    </ul>
+}

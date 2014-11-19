@@ -1,0 +1,17 @@
+@(me:User, tc:TextChat)
+@layout() {
+    <h2>Chatting with <a href="/profile/@tc.getOtherUser(me).id">@tc.getOtherUser(me).firstName</a></h2>
+    <ul>
+        <li><form action="/chats/@tc.getKey/send" method="POST">
+            <textarea name="message"></textarea><input type="submit" />
+        </form></li>
+        @tc.getMessages.toList.sortBy(_.getCreated).map { msg =>
+            <li>@messageLi(msg)</li>
+        }
+        <li>@if(tc.getSender.id == me.id) {
+            @me.firstName (@tc.getCreated.format("dd MMM yyyy")): @tc.getMessage
+        } else {
+            @tc.getOtherUser(me) (@tc.getCreated.format("dd MMM yyyy")) : @tc.getMessage
+        }</li>
+    </ul>
+}

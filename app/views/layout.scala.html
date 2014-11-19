@@ -4,7 +4,7 @@
     <head lang="en">
         <meta charset="UTF-8">
         <title>@title</title>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
         <script src="@controllers.routes.Application.jsRoutes" defer="defer"></script>
     </head>
     <body>
@@ -12,11 +12,24 @@
 
         <ul>
             <li><a href="/">Home</a></li>
-        @controllers.security.Account.getLocalUserOption.map { me =>
+        @controllers.security.Account.getLocalUserOption.map{me =>
             <li><form method="POST" action="/search"><input type="text" name="searchText" placeholder="Search" /><input type="submit" value="Search" /></form></li>
             <li><a href="/matches">Matches</a></li>
             <li><a href="/logout">Logout</a></li>
             <li><a href="/manageProfile">Edit Profile</a></li>
+            @defining(controllers.security.Account.getLocalUserOption.get.getRecentNotifications) { nots =>
+                <li><a href="#" onclick="$('#nots').slideToggle()">@nots.size() notifications since last login</a>
+                    <div id="nots" style="display:none;">
+                        <ul>
+                            @nots.map { not =>
+                                <li>@not</li>
+                            }
+                        </ul>
+                        <a href="/notifications">View All</a>
+                    </div>
+                </li>
+
+            }
         }.getOrElse{
             <li><a href="/login">Login</a></li>
             <li><a href="/signup">Create profile</a></li>
