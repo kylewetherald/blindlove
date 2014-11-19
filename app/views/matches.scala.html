@@ -4,6 +4,8 @@
         rejections:java.util.List[Reject],
         auto:java.util.Map[User,java.lang.Float])
 
+@import com.avaje.ebean.Expr
+
 @layout() {
     <style type=text/css>li { clear:both; } h2 { clear:both; }</style>
     <h2>AutoLove</h2>
@@ -22,6 +24,19 @@
             @defining({ if (mtch.getMatchedUser.id == controllers.security.Account.getLocalUserOption.get.id) mtch.getTargetUser else mtch.getMatchedUser}) { otherUser =>
                 <li>
                     @userLi(new controllers.Application.UserResult(otherUser, null)) <br />
+                @TextChat.find.where().or(Expr.eq("recipient.id", controllers.security.Account.getLocalUserOption.get.id), Expr.eq("sender.id", mtch.getOtherUser(controllers.security.Account.getLocalUserOption.get).id)).findList.map { tc =>
+                    <ul>
+                        <li>From @tc.getSender.firstName to @tc.getRecipient.firstName : @tc.getMessage<br />
+                            @if(tc.getAccepted) {
+                                <a href="/chats/@tc.getKey">Go to chat</a>
+                            } else {
+                                @if(tc.getRecipient.id == controllers.security.Account.getLocalUserOption.get.id) {
+                                    <a href="/chats/@tc.getKey/accept">Accept chat request</a>
+                                }
+                            }
+                        </li>
+                    </ul>
+                }
                 <a href="#" onclick="event.preventDefault; $('#textChatBox').slideToggle()">Request Text Chat</a>
                 <div style="display:none;" id="textChatBox">
                     <form action="/matches/@mtch.getKey/createTextChat" method="POST">

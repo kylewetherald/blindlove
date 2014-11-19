@@ -129,13 +129,13 @@ public class Application extends Controller {
         if (me == null) return index();
         TextChat tc = new TextChat();
         tc.setSender(me);
-        tc.setRecipient(match.getMatchedUser().id == me.id ? match.getTargetUser() : me);
+        tc.setRecipient(match.getMatchedUser().id == me.id ? match.getTargetUser() : match.getMatchedUser());
         tc.setAccepted(false);
         if (request().body().asFormUrlEncoded() != null)
             if (request().body().asFormUrlEncoded().containsKey("message"))
                 tc.setMessage(request().body().asFormUrlEncoded().get("message")[0]);
         tc.save();
-        return matches();
+        return redirect(routes.Application.matches());
     }
 
     @SubjectPresent
@@ -182,7 +182,7 @@ public class Application extends Controller {
                 m.setText(request().body().asFormUrlEncoded().get("message")[0]);
         m.setTextChat(match);
         m.save();
-        return textChat(tid);
+        return redirect(routes.Application.textChat(tid));
     }
 
 }
