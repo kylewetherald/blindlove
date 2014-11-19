@@ -1,1 +1,1 @@
-web:    sudo ./activator run --http.port=$PORT $PLAY_OPTS
+web:    ./activator run --http.port=$PORT $PLAY_OPTS
