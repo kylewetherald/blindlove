@@ -25,7 +25,7 @@ public class Match extends Model implements BasicModel<Long>, Dated {
         setCreated(new Date());
     }
 
-    public User getOtherUser(User me) { return matchedUser.id == me.id ? targetUser : me; }
+    public User getOtherUser(User me) { return matchedUser.id == me.id ? targetUser : matchedUser; }
 
     public static final Model.Finder<Long, Match> find = new Model.Finder<>(Long.class, Match.class);
 

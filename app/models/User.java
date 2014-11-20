@@ -127,7 +127,7 @@ public class User extends Model implements Subject {
 
     public static class Notification {
         public Date receiptDate;
-        public Dated obj;
+        public Object obj;
         public User me;
         public String toString() { //TODO have these include HTML to take action (eg accept / respond)
             if (obj instanceof Message) return "New message from " + ((Message) obj).getSender().firstName;
@@ -137,9 +137,11 @@ public class User extends Model implements Subject {
             if (obj instanceof Reject) return "Rejected by " + ((Reject) obj).getOtherUser(me).firstName;
             return "New notification on " + new SimpleDateFormat("dd MMM yyyy").format(receiptDate);
         }
-        public Notification(Dated obj, User me) {
-            if (obj.getCreated() == null) receiptDate = new Date();
-            else receiptDate = obj.getCreated();
+        public Notification(Object obj, User me) {
+            if (obj instanceof Dated) {
+                if (((Dated) obj).getCreated() == null) receiptDate = new Date();
+                else receiptDate = ((Dated) obj).getCreated();
+            } else throw new RuntimeException("Not a Dated object");
         }
     }
 

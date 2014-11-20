@@ -10,6 +10,7 @@ import play.mvc.Result;
 import services.MatcherService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,8 @@ public class Application extends Controller {
         public UserResult(User u, String field) { this.u = u; this.field = field; }
     }
 
-    private static List<UserResult> usersToUserResults(List<User> us, String f) {
-        List<UserResult> ur = new ArrayList<UserResult>();
+    private static HashSet<UserResult> usersToUserResults(List<User> us, String f) {
+        HashSet<UserResult> ur = new HashSet<UserResult>();
         for (User u:us) {
             ur.add(new UserResult(u, f));
         }
@@ -53,15 +54,25 @@ public class Application extends Controller {
         if (ss == null || ss.length < 1) return badRequest(views.html.index.render());
         String query = ss[0];
 
-        List<UserResult> u = usersToUserResults(User.find.where().ilike("bio", wrapQuery(query)).findList(), "bio");
+        HashSet<UserResult> u = usersToUserResults(User.find.where().ilike("bio", wrapQuery(query)).findList(), "bio");
         u.addAll(usersToUserResults(User.find.where().ilike("currentCity", wrapQuery(query)).findList(), "currentCity"));
         u.addAll(usersToUserResults(User.find.where().ilike("educationalField", wrapQuery(query)).findList(), "educationalField"));
         u.addAll(usersToUserResults(User.find.where().ilike("employmentField", wrapQuery(query)).findList(), "employmentField"));
         u.addAll(usersToUserResults(User.find.where().ilike("gender", wrapQuery(query)).findList(), "gender"));
         u.addAll(usersToUserResults(User.find.where().ilike("hometown", wrapQuery(query)).findList(), "hometown"));
         u.addAll(usersToUserResults(User.find.where().ilike("interests", wrapQuery(query)).findList(), "interests"));
+        List<UserResult> res = new ArrayList<UserResult>();
+        res.addAll(u);
 
-        return ok(views.html.search.render(u));
+        List<Long> alreadySeen = new ArrayList<Long>();
+        ArrayList<UserResult> fr = new ArrayList<UserResult>();
+        for (UserResult ur : res)
+            if (!alreadySeen.contains(ur.u.id)) {
+                alreadySeen.add(ur.u.id);
+                fr.add(ur);
+            }
+
+        return ok(views.html.search.render(fr));
     }
 
     @SubjectPresent

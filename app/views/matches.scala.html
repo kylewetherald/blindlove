@@ -27,7 +27,7 @@
                 </div>
                 <br />
                 <div class="row clearfix">
-                @TextChat.find.where().or(Expr.eq("recipient.id", controllers.security.Account.getLocalUserOption.get.id), Expr.eq("sender.id", mtch.getOtherUser(controllers.security.Account.getLocalUserOption.get).id)).findList.map { tc =>
+                @TextChat.find.where().or(Expr.and(Expr.eq("sender.id", controllers.security.Account.getLocalUserOption.get.id), Expr.eq("recipient.id", mtch.getOtherUser(controllers.security.Account.getLocalUserOption.get).id)), Expr.and(Expr.eq("recipient.id", controllers.security.Account.getLocalUserOption.get.id), Expr.eq("sender.id", mtch.getOtherUser(controllers.security.Account.getLocalUserOption.get).id))).findList.map { tc =>
                     <ul>
                         <li>From @tc.getSender.firstName to @tc.getRecipient.firstName : @tc.getMessage<br />
                             @if(tc.getAccepted) {
@@ -44,8 +44,8 @@
                 <br>
                 <div class="row clearfix">
                 <div class="col-md-4">
-                <a href="#" onclick="event.preventDefault; $('#textChatBox').slideToggle()">Request Text Chat</a>
-                <div  style="display:none;" id="textChatBox">
+                <a href="#" onclick="event.preventDefault; $('#textChatBox@mtch.getKey').slideToggle()">Request Text Chat</a>
+                <div  style="display:none;" id="textChatBox@mtch.getKey">
                     <form action="/matches/@mtch.getKey/createTextChat" method="POST">
                         <div class="form-group">
                         <label for="message">Message</label>
@@ -56,8 +56,8 @@
                 </div>
                 </div>
                 <div class="col-md-4">
-                <div class="row clearfix"><a href="#" onclick="event.preventDefault; $('#videoChatBox').slideToggle()">Request Video Chat</a></div>
-                <div style="display:none;" id="videoChatBox">
+                <div class="row clearfix"><a href="#" onclick="event.preventDefault; $('#videoChatBox@mtch.getKey').slideToggle()">Request Video Chat</a></div>
+                <div style="display:none;" id="videoChatBox@mtch.getKey">
                     <form action="/matches/@mtch.getKey/createVideoChat" method="POST">
                     <div class="form-group">
                         <label for="message">Message</label>
