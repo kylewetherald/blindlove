@@ -61,7 +61,7 @@ public class AccountTest {
     }
 
     @Test
-    public void login() {
+    public void loginB1() {
        running(fakeApplication(inMemoryDatabase()), new Runnable() {
            public void run() {
                testUser();
@@ -78,6 +78,65 @@ public class AccountTest {
            }
        });
    }
+
+   @Test
+   public void loginB2() {
+     running(fakeApplication(inMemoryDatabase()), new Runnable() {
+         public void run() {
+           testUser();
+           FakeRequest fr = new FakeRequest();
+           //Populate login form
+           Map<String,String> login = new HashMap<String,String>();
+           login.put("email","jdoe@acme.com");
+           login.put("password","client");
+           //Post login form to controller
+           Result result = callAction(routes.ref.Account.doLogin(), fr.withFormUrlEncodedBody(login));
+           //Assert that login was successful
+           assertThat(status(result)).isEqualTo(SEE_OTHER);
+           assertThat(session(result).remove("pa.u.id")).contains("jdoe@acme.com");
+           assertThat(contentAsString(result)).contains("");
+         }
+     });
+  }
+
+   @Test
+   public void loginB3() {
+     running(fakeApplication(inMemoryDatabase()), new Runnable() {
+         public void run() {
+           testUser();
+           FakeRequest fr = new FakeRequest();
+           //Populate login form
+           Map<String,String> login = new HashMap<String,String>();
+           login.put("email","jdoe@acme.com");
+           login.put("password","bogus");
+           //Post login form to controller
+           Result result = callAction(routes.ref.Account.doLogin(), fr.withFormUrlEncodedBody(login));
+           //Assert that login was successful
+           assertThat(status(result)).isEqualTo(SEE_OTHER);
+           assertThat(session(result).remove("pa.u.id")).isNull();
+         }
+     });
+  }
+
+  @Test
+   public void loginB4() {
+     running(fakeApplication(inMemoryDatabase()), new Runnable() {
+         public void run() {
+           testUser();
+           FakeRequest fr = new FakeRequest();
+           //Populate login form
+           Map<String,String> login = new HashMap<String,String>();
+           login.put("email","jdoe@acme.com");
+           login.put("password","");
+           //Post login form to controller
+           Result result = callAction(routes.ref.Account.doLogin(), fr.withFormUrlEncodedBody(login));
+           //Assert that login was successful
+           assertThat(status(result)).isEqualTo(SEE_OTHER);
+           assertThat(session(result).remove("pa.u.id")).isNull();
+         }
+     });
+  }
+
 
     @Test
     public void registerAndConfirmAccountant() {
@@ -111,7 +170,5 @@ public class AccountTest {
                 assertThat(u.emailValidated).isTrue();
             }
         });
-    }
-
-
+    }    
 }
