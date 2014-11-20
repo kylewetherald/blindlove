@@ -1,0 +1,1 @@
+web:    activator run $PORT
