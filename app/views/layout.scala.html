@@ -4,16 +4,29 @@
     <head lang="en">
         <meta charset="UTF-8">
         <title>@title</title>
+        <link rel="stylesheet" media="screen" href="http://www.kylewetherald.com/CS1530/css/bootstrap.min.css" />
+        <link rel="stylesheet" media="screen" href="http://www.kylewetherald.com/CS1530/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" media="screen" href="http://www.kylewetherald.com/CS1530/css/style.css" />
         <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
+        <script src="http://www.kylewetherald.com/CS1530/js/bootstrap.min.js"></script>
         <script src="@controllers.routes.Application.jsRoutes" defer="defer"></script>
     </head>
     <body>
-        <h1>BlindLove</h1>
-
-        <ul>
+<!--         <h1>BlindLove</h1> -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+        <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
             <li><a href="/">Home</a></li>
         @controllers.security.Account.getLocalUserOption.map{me =>
-            <li><form method="POST" action="/search"><input type="text" name="searchText" placeholder="Search" /><input type="submit" value="Search" /></form></li>
+            <li>
+                <form method="POST" action="/search" class="navbar-form navbar-right">
+                    <div class="input-group">
+                        <input type="text" name="searchText" placeholder="Search" class="form-control"/>
+                        <span class="input-group-btn"><input type="submit" value="Search" class="form-control"/></span>
+                    </div>
+                </form>
+            </li>
             <li><a href="/matches">Matches</a></li>
             <li><a href="/logout">Logout</a></li>
             <li><a href="/manageProfile">Edit Profile</a></li>
@@ -36,8 +49,12 @@
         }
 
         </ul>
+        </div>
+        </div>
+        </nav>
         <hr />
         @controllers.security.Account.getLocalUserOption.map { me =>
+        <br><br>
             <p>Welcome, @me.firstName!</p>
         }
         @content

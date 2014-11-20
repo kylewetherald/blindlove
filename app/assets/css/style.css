@@ -1,0 +1,14 @@
+#logo {
+	max-height: 60%;
+}
+.main {
+	margin-top: 2em;
+	background-image: url("../img/stripe.png");
+	background-repeat: both;
+}
+.centered-y {
+	vertical-align: center;
+}
+body {
+	background-color:#9df;
+}
