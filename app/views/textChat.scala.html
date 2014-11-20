@@ -1,18 +1,33 @@
 @(me:User, tc:TextChat)
 @layout() {
+    <div class="container">
     <meta http-equiv="refresh" content="30" />
+    <div class="panel col-md-6 col-md-offset-3">
+    <div class="panel-body">
     <h2>Chatting with <a href="/profile/@tc.getOtherUser(me).id">@tc.getOtherUser(me).firstName</a></h2>
-    <ul>
-        <li><form action="/chats/@tc.getKey/send" method="POST">
-            <textarea name="message"></textarea><input type="submit" />
-        </form></li>
+    <form action="/chats/@tc.getKey/send" method="POST">
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea name="message" class="form-control"></textarea>
+        </div>
+        <input type="submit" class="form-control"/>
+    </form>
+    <br>
+    <ul class="list-group">
         @tc.getMessages.toList.sortBy(_.getCreated).reverse.map { msg =>
-            <li>@messageLi(msg)</li>
+            @if(msg.getSender.id == me.id) {
+                <li class="list-group-item text-right">@messageLi(msg)</li>
+            } else {
+                <li class="list-group-item list-group-item-warning">@messageLi(msg)</li>
+            }
         }
-        <li>@if(tc.getSender.id == me.id) {
-            @me.firstName (@tc.getCreated.format("dd MMM yyyy")): @tc.getMessage
+        @if(tc.getSender.id == me.id) {
+            <li class="list-group-item text-right"><p>@me.firstName (@tc.getCreated.format("dd MMM yyyy")): @tc.getMessage</li>
         } else {
-            @tc.getOtherUser(me).firstName (@tc.getCreated.format("dd MMM yyyy")) : @tc.getMessage
-        }</li>
+            <li class="list-group-item list-group-item-warning">@tc.getOtherUser(me).firstName (@tc.getCreated.format("dd MMM yyyy")) : @tc.getMessage</li>
+        }
     </ul>
+    </div>
+    </div>
+    </div>
 }

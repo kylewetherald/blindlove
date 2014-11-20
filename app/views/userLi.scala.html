@@ -11,7 +11,7 @@
             margin-right: 10px;
         }
     </style>
-    <h3><img style="float : left ;" src="@routes.Assets.at("images/anon.png")" />
+    <h3 class="h3"><img style="float : left ;" src="@routes.Assets.at("images/anon.png")" />
         <a href="/profile/@u.id">@u.firstName @(u.lastName.charAt(0).toString+".")</a></h3>
     <div style="width:950px">
         <div class="bullet"><strong>Gender: </strong>@u.gender     @if(ur.field != null && ur.field.equals("gender")) { * }</div>

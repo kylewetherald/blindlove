@@ -1,16 +1,22 @@
 @(u:List[controllers.Application.UserResult])
 
 @layout(){
+  <style>
+  	ul {
+  		list-style: none;
+  	}
+  </style>
   <div class="container">
     @u.filter(_.u.id != controllers.security.Account.getLocalUserOption.get.id).map { ur =>
-        <li>
         <div class="panel row">
+        <div class="panel-body">
         <div class="col-md-10">@userLi(ur)
         <div class="col-md-2">
         <a href="/createMatch?targetId=@ur.u.id">Request Match</a>
     	</div>
     	</div>
-        </li>
+    	</div>
     }
    </div>
+   <br />
 }
