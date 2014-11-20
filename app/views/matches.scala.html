@@ -7,23 +7,26 @@
 @import com.avaje.ebean.Expr
 
 @layout() {
-    <style type=text/css>li { clear:both; } h2 { clear:both; }</style>
-    <h2>AutoLove</h2>
-    <ul>
+    <div class="container">
+    <br><br>
+    <style type="text/css">li {/* clear:both;*/ } h2 { /*clear:both;*/ }</style>
+    <h2 class="h2">AutoLove</h2>
     @auto.toList.sortBy(_._2).reverse.map { us =>
-        <li>
+        <div class="row clearfix">
+
             <strong>BlindLove MatchScore: @us._2</strong><br />
             @userLi(new controllers.Application.UserResult(us._1, null)) <br />
             <a href="/createMatch?targetId=@us._1.id">Create Match</a>
-        </li>
+        </div>
     }
-    </ul>
-    <h2>Requited Love</h2>
-    <ul>
+    <h2 class="h2">Requited Love</h2>
         @love.map { mtch =>
             @defining({ if (mtch.getMatchedUser.id == controllers.security.Account.getLocalUserOption.get.id) mtch.getTargetUser else mtch.getMatchedUser}) { otherUser =>
-                <li>
-                    @userLi(new controllers.Application.UserResult(otherUser, null)) <br />
+                <div class="row clearfix">
+                    @userLi(new controllers.Application.UserResult(otherUser, null)) 
+                </div>
+                <br />
+                <div class="row clearfix">
                 @TextChat.find.where().or(Expr.eq("recipient.id", controllers.security.Account.getLocalUserOption.get.id), Expr.eq("sender.id", mtch.getOtherUser(controllers.security.Account.getLocalUserOption.get).id)).findList.map { tc =>
                     <ul>
                         <li>From @tc.getSender.firstName to @tc.getRecipient.firstName : @tc.getMessage<br />
@@ -37,47 +40,58 @@
                         </li>
                     </ul>
                 }
+                </div>
+                <br>
+                <div class="row clearfix">
+                <div class="col-md-4">
                 <a href="#" onclick="event.preventDefault; $('#textChatBox').slideToggle()">Request Text Chat</a>
-                <div style="display:none;" id="textChatBox">
+                <div  style="display:none;" id="textChatBox">
                     <form action="/matches/@mtch.getKey/createTextChat" method="POST">
-                        <textarea name="message" placeholder="Enter a message"></textarea>
-                        <input type="submit" />
+                        <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea name="message" placeholder="Enter a message" class="form-control"></textarea>
+                        </div>
+                        <input type="submit" class="form-control"/>
                     </form>
                 </div>
-                <a href="#" onclick="event.preventDefault; $('#videoChatBox').slideToggle()">Request Video Chat</a>
+                </div>
+                <div class="col-md-4">
+                <div class="row clearfix"><a href="#" onclick="event.preventDefault; $('#videoChatBox').slideToggle()">Request Video Chat</a></div>
                 <div style="display:none;" id="videoChatBox">
                     <form action="/matches/@mtch.getKey/createVideoChat" method="POST">
-                    <textarea name="message" placeholder="Enter a message"></textarea>
-                    <input type="submit" />
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea name="message" placeholder="Enter a message" class="form-control"></textarea>
+                    </div>
+                    <input type="submit" class="form-control"/>
                 </form>
                 </div>
-                </li>
+                </div>
+                </div>
             }
         }
-    </ul>
-    <h2>Suitors</h2>
-    <ul>
-        @incoming.map { mtch =>
-          <li>
-              @userLi(new controllers.Application.UserResult(mtch.getMatchedUser, null)) <br />
-              <a href="/matches/@mtch.getKey/accept">Accept Match</a>
-              <a href="/matches/@mtch.getKey/reject">Reject Match</a>
-          </li>
-        }
-    </ul>
-    <h2>Unrequited Love</h2>
-    <ul>
-    @outgoing.map { mtch =>
-        <li>
-            @userLi(new controllers.Application.UserResult(mtch.getTargetUser, null)) <br />
-        </li>
-    }
-    </ul>
-    <h2>Rejections</h2>
-    <ul>
-    @rejections.map { reject =>
-        <li>@userLi(new controllers.Application.UserResult(reject.getRejector, null))</li>
-    }
-    </ul>
+    <h2 class="h2">Suitors</h2>
 
+        @incoming.map { mtch =>
+          <div clas="row clearfix">
+              @userLi(new controllers.Application.UserResult(mtch.getMatchedUser, null)) <br />
+              <div class="row clearfix"><a href="/matches/@mtch.getKey/accept">Accept Match</a>
+                <a href="/matches/@mtch.getKey/reject">Reject Match</a></div>
+          </div>
+        }
+    <h2 class="h2">Unrequited Love</h2>
+
+    @outgoing.map { mtch =>
+        <div class="row clearfix">
+            @userLi(new controllers.Application.UserResult(mtch.getTargetUser, null)) <br />
+        </div>
+    }
+
+    <h2 class="h2">Rejections</h2>
+
+    @rejections.map { reject =>
+        <div class="row clearfix">@userLi(new controllers.Application.UserResult(reject.getRejector, null))</div>
+    }
+
+    </div>
 }

@@ -1,6 +1,18 @@
 @(in:User)
 @layout() {
-    @userLi(new controllers.Application.UserResult(in, null))<br />
-    <p><strong>Bio: </strong>@in.bio</p>
-    <p><strong>Interests: </strong>@in.interests</p>
+	<div class="container">
+	<div class="container col-md-8 panel col-md-offset-2">
+		<div class="panel-body">
+		<div class="row">
+	    @userLi(new controllers.Application.UserResult(in, null))
+		</div>
+		<div class="row">
+	    <p><strong>Bio: </strong>@in.bio</p>
+	    </div>
+		<div class="row">
+	    <p><strong>Interests: </strong>@in.interests</p>
+		</div>
+	</div>
+	</div>
+	</div>
 }
