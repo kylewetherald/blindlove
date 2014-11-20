@@ -14,6 +14,7 @@ POST        /matches/:mid/createTextChat           controllers.Application.creat
 POST        /chats/:tid/send                       controllers.Application.sendMessage(tid:Long)
 GET         /chats/:tid/accept                     controllers.Application.acceptTextChat(tid:Long)
 GET         /chats/:tid                            controllers.Application.textChat(tid:Long)
+GET         /profile                               controllers.Application.myProfile()
 # CRUD Controllers
 ->          /app                                   play.crud.Routes
 # REST API

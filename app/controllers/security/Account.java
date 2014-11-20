@@ -153,7 +153,7 @@ public class Account extends Controller {
 
             //if email was changed, must login again
             if (emailChanged) return redirect(routes.Account.login());
-            return ok(views.html.account.manage_profile.render(form(UserSignup.class).fill(ra)));
+            return redirect(controllers.routes.Application.myProfile());
 
         }
     }

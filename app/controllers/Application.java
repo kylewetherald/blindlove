@@ -139,6 +139,12 @@ public class Application extends Controller {
     }
 
     @SubjectPresent
+    public static Result myProfile() {
+        User me = controllers.security.Account.getLocalUser(session());
+        return profile(me.id);
+    }
+
+    @SubjectPresent
     public static Result acceptTextChat(Long tid) {
         User me = controllers.security.Account.getLocalUser(session());
         TextChat match = TextChat.find.byId(tid);
