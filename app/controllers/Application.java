@@ -3,9 +3,7 @@ package controllers;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import com.avaje.ebean.Expr;
 import controllers.security.Account;
-import models.Match;
-import models.Reject;
-import models.User;
+import models.*;
 import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -41,6 +39,8 @@ public class Application extends Controller {
         }
         return ur;
     }
+
+    public static Result notifications() { return ok(views.html.notifications.render()); }
 
     private static String wrapQuery(String query) { return "%" + query + "%"; }
 
@@ -119,6 +119,70 @@ public class Application extends Controller {
         m.setAccepted(false);
         m.save();
         return redirect(routes.Application.matches());
+    }
+
+    @SubjectPresent
+    public static Result createTextChat(Long mid) {
+        User me = controllers.security.Account.getLocalUser(session());
+        models.Match match = Match.find.byId(mid);
+        if (match == null) return matches();
+        if (me == null) return index();
+        TextChat tc = new TextChat();
+        tc.setSender(me);
+        tc.setRecipient(match.getMatchedUser().id == me.id ? match.getTargetUser() : match.getMatchedUser());
+        tc.setAccepted(false);
+        if (request().body().asFormUrlEncoded() != null)
+            if (request().body().asFormUrlEncoded().containsKey("message"))
+                tc.setMessage(request().body().asFormUrlEncoded().get("message")[0]);
+        tc.save();
+        return redirect(routes.Application.matches());
+    }
+
+    @SubjectPresent
+    public static Result acceptTextChat(Long tid) {
+        User me = controllers.security.Account.getLocalUser(session());
+        TextChat match = TextChat.find.byId(tid);
+        if (me == null) return index();
+        if (match == null) return notifications();
+        match.setAccepted(true);
+        match.save();
+        return textChat(tid);
+    }
+
+    @SubjectPresent
+    public static Result rejectTextChat(Long tid) {
+        User me = controllers.security.Account.getLocalUser(session());
+        TextChat match = TextChat.find.byId(tid);
+        if (me == null) return index();
+        if (match == null) return notifications();
+        match.delete();
+        return index();
+    }
+
+    @SubjectPresent
+    public static Result textChat(Long tid) {
+        User me = controllers.security.Account.getLocalUser(session());
+        TextChat match = TextChat.find.byId(tid);
+        if (me == null) return index();
+        if (match == null) return notFound(views.html.index.render());
+        return ok(views.html.textChat.render(me, match));
+    }
+
+    @SubjectPresent
+    public static Result sendMessage(Long tid) {
+        User me = controllers.security.Account.getLocalUser(session());
+        TextChat match = TextChat.find.byId(tid);
+        if (me == null) return index();
+        if (match == null) return notFound(views.html.index.render());
+        Message m = new Message();
+        m.setSender(me);
+        m.setRecipient(match.getOtherUser(me));
+        if (request().body().asFormUrlEncoded() != null)
+            if (request().body().asFormUrlEncoded().containsKey("message"))
+                m.setText(request().body().asFormUrlEncoded().get("message")[0]);
+        m.setTextChat(match);
+        m.save();
+        return redirect(routes.Application.textChat(tid));
     }
 
 }

@@ -9,6 +9,11 @@ GET         /matches/:mid/accept                   controllers.Application.accep
 GET         /matches/:mid/reject                   controllers.Application.rejectMatch(mid:Long)
 GET         /createMatch                           controllers.Application.createMatch(targetId:Long)
 GET         /profile/:uid                          controllers.Application.profile(uid:Long)
+GET         /notifications                         controllers.Application.notifications
+POST        /matches/:mid/createTextChat           controllers.Application.createTextChat(mid:Long)
+POST        /chats/:tid/send                       controllers.Application.sendMessage(tid:Long)
+GET         /chats/:tid/accept                     controllers.Application.acceptTextChat(tid:Long)
+GET         /chats/:tid                            controllers.Application.textChat(tid:Long)
 # CRUD Controllers
 ->          /app                                   play.crud.Routes
 # REST API
